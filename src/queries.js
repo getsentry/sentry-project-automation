@@ -1,5 +1,14 @@
 import CONFIG from "./config.js";
 
+String.prototype.escapeSpecialChars = function () {
+  return this.replace(/\\/g, "\\\\")
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "\\r")
+    .replace(/\t/g, "\\t")
+    .replace(/\f/g, "\\f")
+    .replace(/"/g, '\\"');
+};
+
 /**
  *
  * @returns {string}
@@ -9,7 +18,7 @@ const queryTeamRepositories = () => {
     .map((repo) => `repo:${repo.owner}/${repo.repo}`)
     .join(" ");
 
-  return `${repoString} is:open`;
+  return `${repoString} is:open label:"Status: Untriaged"`.escapeSpecialChars();
 };
 
 /**

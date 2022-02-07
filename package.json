@@ -4,7 +4,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "migrate": "node src/migration.js"
   },
   "repository": "git@github.com:vladanpaunovic/webplatform-automation.git",
   "author": "Vladan Paunovic <vladan.paunovic.bg@gmail.com>",
@@ -12,6 +14,7 @@
   "dependencies": {
     "dotenv": "^16.0.0",
     "nodemon": "^2.0.15",
-    "octokit": "^1.7.1"
+    "octokit": "^1.7.1",
+    "parse-github-url": "^1.0.2"
   }
 }

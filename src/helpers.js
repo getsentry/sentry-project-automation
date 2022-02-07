@@ -22,11 +22,11 @@ export const filterIssuesNotInProject = (allIssues, projectItems) => {
  * @param {string} projectId
  */
 export async function addIssuesToProject(issuesArray, projectId) {
-  if (issuesNotInProject.length) {
+  if (issuesArray.length) {
     console.info(`Syncing with project starting...`);
 
-    for (const issue of issuesNotInProject) {
-      await addItemToProject(project.projectId, issue.id);
+    for (const issue of issuesArray) {
+      await addItemToProject(projectId, issue.id);
 
       console.info(`Added: ${issue.title}`);
     }
