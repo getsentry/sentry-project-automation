@@ -13,6 +13,7 @@ const CONFIG = {
     type: "user", // "user" or "organization"
   },
   GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+  PAGE_LIMIT: 50,
 };
 
 // const CONFIG = {

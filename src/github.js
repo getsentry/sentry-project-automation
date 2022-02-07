@@ -12,8 +12,6 @@ String.prototype.escapeSpecialChars = function () {
 
 const octokit = new Octokit({ auth: CONFIG.GITHUB_TOKEN });
 
-const PAGE_LIMIT = 50;
-
 // Helper function, used to test auth flow
 export const login = await octokit.rest.users.getAuthenticated();
 
@@ -24,7 +22,7 @@ export const getIssuesFromQuery = async (searchQuery) => {
   console.info(`Querying Github for: ${searchQuery}`);
   const constructQuery = ({ searchQuery, after = null }) => `
       query {
-          search(first: ${PAGE_LIMIT}, after: ${after}, type: ISSUE, query: "${searchQuery}") {
+          search(first: ${CONFIG.PAGE_LIMIT}, after: ${after}, type: ISSUE, query: "${searchQuery}") {
             issueCount
             pageInfo {
               hasNextPage
@@ -74,7 +72,7 @@ export const getProject = async ({
   projectNumber,
   type = "user",
   after = null,
-  limit = PAGE_LIMIT,
+  limit = CONFIG.PAGE_LIMIT,
 }) => {
   const items = await octokit.graphql(`
   query{
