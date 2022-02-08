@@ -18,7 +18,7 @@ const queryTeamRepositories = () => {
     .map((repo) => `repo:${repo.owner}/${repo.repo}`)
     .join(" ");
 
-  return `${repoString} is:open label:"Status: Untriaged"`.escapeSpecialChars();
+  return `${repoString} is:open`.escapeSpecialChars();
 };
 
 /**
