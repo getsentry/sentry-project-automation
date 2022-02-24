@@ -15,7 +15,6 @@ const CONFIG = {
     { owner: "getsentry", repo: "sentry-webpack-plugin" },
     { owner: "getsentry", repo: "sentry-webpack-wizard" },
     { owner: "getsentry", repo: "craft" },
-    { owner: "getsentry", repo: "publish" },
     { owner: "getsentry", repo: "action-release" },
     { owner: "getsentry", repo: "action-prepare-release" },
   ],
