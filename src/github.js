@@ -1,19 +1,21 @@
+import dotenv from "dotenv";
+dotenv.config();
 import { Octokit } from "octokit";
-import CONFIG from "./config.js";
 
-const octokit = new Octokit({ auth: CONFIG.GITHUB_TOKEN });
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
 // Helper function, used to test auth flow
 export const login = await octokit.rest.users.getAuthenticated();
 
 /**
  * @param {string} searchQuery
+ * @param {*} config
  */
-export const getIssuesFromQuery = async (searchQuery) => {
+export const getIssuesFromQuery = async (searchQuery, config) => {
   console.info(`Querying Github for: ${searchQuery}`);
   const constructQuery = ({ searchQuery, after = null }) => `
       query {
-          search(first: ${CONFIG.PAGE_LIMIT}, after: ${after}, type: ISSUE, query: "${searchQuery}") {
+          search(first: ${config.PAGE_LIMIT}, after: ${after}, type: ISSUE, query: "${searchQuery}") {
             issueCount
             pageInfo {
               hasNextPage
@@ -63,7 +65,7 @@ export const getProject = async ({
   projectNumber,
   type = "user",
   after = null,
-  limit = CONFIG.PAGE_LIMIT,
+  limit = 50,
 }) => {
   const items = await octokit.graphql(`
   query{
@@ -103,8 +105,8 @@ export const getProject = async ({
  * @param {number} project.projectNumber
  * @param {"user"|"organization"} project.type
  */
-export const getAllProjectItems = async () => {
-  const { githubUser, projectNumber, type } = CONFIG.githubProject;
+export const getAllProjectItems = async (config) => {
+  const { githubUser, projectNumber, type } = config.githubProject;
   console.info(`Querying open issues in Github project: ${projectNumber}`);
   let items = [];
 
@@ -113,6 +115,8 @@ export const getAllProjectItems = async () => {
     githubUser,
     projectNumber,
     type,
+    after: null,
+    limit: config.PAGE_LIMIT,
   });
 
   items.push(...firstBatchOfItems.items.nodes);

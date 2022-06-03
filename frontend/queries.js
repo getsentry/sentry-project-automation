@@ -1,13 +1,5 @@
 import CONFIG from "./config.js";
-
-String.prototype.escapeSpecialChars = function () {
-  return this.replace(/\\/g, "\\\\")
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "\\r")
-    .replace(/\t/g, "\\t")
-    .replace(/\f/g, "\\f")
-    .replace(/"/g, '\\"');
-};
+import { escapeSpecialChars } from "../src/helpers.js";
 
 /**
  *
@@ -18,7 +10,7 @@ const queryTeamRepositories = () => {
     .map((repo) => `repo:${repo.owner}/${repo.repo}`)
     .join(" ");
 
-  return `${repoString} is:open`.escapeSpecialChars();
+  return escapeSpecialChars(`${repoString} is:open`);
 };
 
 /**
@@ -30,11 +22,9 @@ const querySentryRepositories = () => {
     .map((repo) => ` -repo:${repo.owner}/${repo.repo}`)
     .join("");
 
-  const labelString = ["Team: Web Frontend", "Team: Web Backend"]
-    .map((label) => `"${label}"`)
-    .join(",");
-
-  return `is:open label:${labelString} org:getsentry ${repoString}`.escapeSpecialChars();
+  return escapeSpecialChars(
+    `is:open label:"Team: Web Frontend" org:getsentry ${repoString}`
+  );
 };
 
 const QUERIES = {

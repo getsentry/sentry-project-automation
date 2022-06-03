@@ -28,11 +28,25 @@ export async function addIssuesToProject(issuesArray, projectId) {
     for (const issue of issuesArray) {
       await addItemToProject(projectId, issue.id);
 
-      console.info(`Added: ${issue.title}`);
+      console.info(`[${projectId}] Added: ${issue.title}`);
     }
 
-    console.info(`Syncing with project finished.`);
+    console.info(`[${projectId}] Syncing with project finished.`);
   } else {
-    console.info(`Nothing to sync. Exiting.`);
+    console.info(`[${projectId}] Nothing to sync. Exiting.`);
   }
 }
+
+/**
+ *
+ * @param {string} string
+ */
+export const escapeSpecialChars = (string) => {
+  return string
+    .replace(/\\/g, "\\\\")
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "\\r")
+    .replace(/\t/g, "\\t")
+    .replace(/\f/g, "\\f")
+    .replace(/"/g, '\\"');
+};
