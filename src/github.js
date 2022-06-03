@@ -12,7 +12,9 @@ export const login = await octokit.rest.users.getAuthenticated();
  * @param {*} config
  */
 export const getIssuesFromQuery = async (searchQuery, config) => {
-  console.info(`Querying Github for: ${searchQuery}`);
+  console.info(
+    `[PID:${config.githubProject.projectNumber}] Querying Github for: ${searchQuery}`
+  );
   const constructQuery = ({ searchQuery, after = null }) => `
       query {
           search(first: ${config.PAGE_LIMIT}, after: ${after}, type: ISSUE, query: "${searchQuery}") {
@@ -107,7 +109,9 @@ export const getProject = async ({
  */
 export const getAllProjectItems = async (config) => {
   const { githubUser, projectNumber, type } = config.githubProject;
-  console.info(`Querying open issues in Github project: ${projectNumber}`);
+  console.info(
+    `[PID:${projectNumber}] Querying open issues in Github project: ${projectNumber}`
+  );
   let items = [];
 
   // Read the first page.
