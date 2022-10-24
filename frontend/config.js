@@ -4,6 +4,7 @@ const CONFIG = {
     { owner: "getsentry", repo: "sentry-webpack-plugin" },
     { owner: "getsentry", repo: "sentry-webpack-wizard" },
     { owner: "getsentry", repo: "sentry-electron" },
+    { owner: "getsentry", repo: "sentry-javascript-bundler-plugins" },
   ],
   githubProject: {
     githubUser: "getsentry",
