@@ -1,4 +1,4 @@
-name: Web Platform automation
+name: Project Automations
 
 on:
   workflow_dispatch:
