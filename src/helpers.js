@@ -50,3 +50,30 @@ export const escapeSpecialChars = (string) => {
     .replace(/\f/g, "\\f")
     .replace(/"/g, '\\"');
 };
+
+
+/**
+ *
+ * @returns {string}
+ */
+export const queryTeamRepositories = () => {
+  const repoString = CONFIG.repositories
+    .map((repo) => `repo:${repo.owner}/${repo.repo}`)
+    .join(" ");
+
+  return escapeSpecialChars(`${repoString} is:open`);
+};
+
+/**
+ * @param {string} team label
+ * @returns {string}
+ */
+export const querySentryRepositories = (teamLabel) => {
+  const repoString = CONFIG.repositories
+    .map((repo) => ` -repo:${repo.owner}/${repo.repo}`)
+    .join("");
+
+  return escapeSpecialChars(
+    `is:open label:"${teamLabel}" org:getsentry ${repoString}`
+  );
+};

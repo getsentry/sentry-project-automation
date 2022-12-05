@@ -1,6 +1,7 @@
 const CONFIG = {
   repositories: [
     { owner: "getsentry", repo: "relay" },
+    { owner: "getsentry", repo: "team-ingest" },
   ],
   githubProject: {
     githubUser: "getsentry",

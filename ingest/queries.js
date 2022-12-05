@@ -1,35 +1,9 @@
 import CONFIG from "./config.js";
-import { escapeSpecialChars } from "../src/helpers.js";
-
-/**
- *
- * @returns {string}
- */
-const queryTeamRepositories = () => {
-  const repoString = CONFIG.repositories
-    .map((repo) => `repo:${repo.owner}/${repo.repo}`)
-    .join(" ");
-
-  return escapeSpecialChars(`${repoString} is:open`);
-};
-
-/**
- *
- * @returns {string}
- */
-const querySentryRepositories = () => {
-  const repoString = CONFIG.repositories
-    .map((repo) => ` -repo:${repo.owner}/${repo.repo}`)
-    .join("");
-
-  return escapeSpecialChars(
-    `is:open label:"Team: Ingest" org:getsentry ${repoString}`
-  );
-};
+import { escapeSpecialChars, queryTeamRepositories, querySentryRepositories } from "../src/helpers.js";
 
 const QUERIES = {
   teamRepositories: queryTeamRepositories(),
-  sentryRepositories: querySentryRepositories(),
+  sentryRepositories: querySentryRepositories("Team: Ingest"),
 };
 
 export default QUERIES;
