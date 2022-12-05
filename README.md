@@ -1,7 +1,4 @@
-# webplatform-automation
-Automation for Sentry Web Platform Team
-
-[![Web Platform automation](https://github.com/vladanpaunovic/webplatform-automation/actions/workflows/webplatform.yaml/badge.svg?branch=main)](https://github.com/vladanpaunovic/webplatform-automation/actions/workflows/webplatform.yaml)
+# Automation for Sentry Github Projects
 
 ## Configuration
 
