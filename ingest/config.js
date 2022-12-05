@@ -9,6 +9,7 @@ const CONFIG = {
     type: "organization", // "user" or "organization"
   },
   PAGE_LIMIT: 50,
+  teamLabel: "Team: Ingest"
 };
 
 export default CONFIG;

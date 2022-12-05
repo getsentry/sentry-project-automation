@@ -53,11 +53,11 @@ export const escapeSpecialChars = (string) => {
 
 
 /**
- *
+ * @param {Object} config
  * @returns {string}
  */
-export const queryTeamRepositories = () => {
-  const repoString = CONFIG.repositories
+export const queryTeamRepositories = (config) => {
+  const repoString = config.repositories
     .map((repo) => `repo:${repo.owner}/${repo.repo}`)
     .join(" ");
 
@@ -65,15 +65,15 @@ export const queryTeamRepositories = () => {
 };
 
 /**
- * @param {string} team label
+ * @param {Object} config
  * @returns {string}
  */
-export const querySentryRepositories = (teamLabel) => {
-  const repoString = CONFIG.repositories
+export const querySentryRepositories = (config) => {
+  const repoString = config.repositories
     .map((repo) => ` -repo:${repo.owner}/${repo.repo}`)
     .join("");
 
   return escapeSpecialChars(
-    `is:open label:"${teamLabel}" org:getsentry ${repoString}`
+    `is:open label:"${config.teamLabel}" org:getsentry ${repoString}`
   );
 };
