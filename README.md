@@ -11,6 +11,7 @@ The repository must contain a
 | ---------- | ------ |
 | `public_repo` | Required to search issues in public repositories |
 | `write:org` | Required to create cards in an organization project (the team board) |
+| `read:org` | Required to read cards in an organization project (the team board) |
 
 If running the code locally, the configuration is done through environment
 variables. Requirements:
