@@ -12,7 +12,9 @@ export const filterIssuesNotInProject = (allIssues, projectItems) => {
   const issuesInProject = extractIssuesFromProjectItems(projectItems);
 
   return allIssues
-    .filter((issue) => !issuesInProject.map((iss) => iss.id).includes(issue.id))
+    .filter(
+      (issue) => !issuesInProject.map((iss) => iss?.id).includes(issue.id)
+    )
     .filter((issue) => issue.id && issue.title);
 };
 
@@ -50,7 +52,6 @@ export const escapeSpecialChars = (string) => {
     .replace(/\f/g, "\\f")
     .replace(/"/g, '\\"');
 };
-
 
 /**
  * @param {Object} config
