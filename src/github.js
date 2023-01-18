@@ -72,7 +72,7 @@ export const getProject = async ({
   const items = await octokit.graphql(`
   query{
     ${type}(login: "${githubUser}"){
-      projectNext(number: ${projectNumber}) {
+      projectV2(number: ${projectNumber}) {
         id
         items(first: ${limit}, after: ${after}) {
           pageInfo {
