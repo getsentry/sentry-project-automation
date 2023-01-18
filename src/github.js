@@ -114,35 +114,39 @@ export const getAllProjectItems = async (config) => {
   );
   let items = [];
 
-  // Read the first page.
-  const firstBatchOfItems = await getProject({
-    githubUser,
-    projectNumber,
-    type,
-    after: null,
-    limit: config.PAGE_LIMIT,
-  });
-
-  items.push(...firstBatchOfItems.items.nodes);
-
-  let after = firstBatchOfItems.items.pageInfo.hasNextPage
-    ? `"${firstBatchOfItems.items.pageInfo.endCursor}"`
-    : null;
-
-  while (after != null) {
-    var page = await getProject({
+  try {
+    // Read the first page.
+    const firstBatchOfItems = await getProject({
       githubUser,
       projectNumber,
       type,
-      after,
+      after: null,
+      limit: config.PAGE_LIMIT,
     });
-    items.push(...page.items.nodes);
-    after = page.items.pageInfo.hasNextPage
-      ? `"${page.items.pageInfo.endCursor}"`
+
+    items.push(...firstBatchOfItems.items.nodes);
+
+    let after = firstBatchOfItems.items.pageInfo.hasNextPage
+      ? `"${firstBatchOfItems.items.pageInfo.endCursor}"`
       : null;
+
+    while (after != null) {
+      var page = await getProject({
+        githubUser,
+        projectNumber,
+        type,
+        after,
+      });
+      items.push(...page.items.nodes);
+      after = page.items.pageInfo.hasNextPage
+        ? `"${page.items.pageInfo.endCursor}"`
+        : null;
+    }
+  } catch (error) {
+    console.error(error);
   }
 
-  return { projectItams: items, projectId: firstBatchOfItems?.projectId };
+  return { projectItems: items, projectId: firstBatchOfItems?.projectId };
 };
 
 /**

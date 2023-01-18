@@ -15,7 +15,7 @@ export default async function main() {
 
   const issuesNotInProject = filterIssuesNotInProject(
     [...issues, ...additionalIssues],
-    project.projectItams
+    project.projectItems
   );
 
   console.info(`[BACKEND] Found ${issuesNotInProject.length} issues to sync.`);
