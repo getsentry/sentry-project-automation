@@ -93,6 +93,8 @@ export const getProject = async ({
     }
   }`);
 
+  console.log(items);
+
   return {
     items: items[type].projectV2.items,
     projectId: items[type].projectV2.id,
