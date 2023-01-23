@@ -93,8 +93,6 @@ export const getProject = async ({
     }
   }`);
 
-  console.log(items);
-
   return {
     items: items[type].projectV2.items,
     projectId: items[type].projectV2.id,
@@ -113,6 +111,7 @@ export const getAllProjectItems = async (config) => {
     `[PID:${projectNumber}] Querying open issues in Github project: ${projectNumber}`
   );
   let items = [];
+  let projectId = null;
 
   try {
     // Read the first page.
@@ -142,11 +141,13 @@ export const getAllProjectItems = async (config) => {
         ? `"${page.items.pageInfo.endCursor}"`
         : null;
     }
+
+    projectId = firstBatchOfItems?.projectId;
   } catch (error) {
     console.error(error);
   }
 
-  return { projectItems: items, projectId: firstBatchOfItems?.projectId };
+  return { projectItems: items, projectId: projectId };
 };
 
 /**
