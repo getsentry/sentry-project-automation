@@ -158,7 +158,7 @@ export const addItemToProject = async (projectId, issueId) => {
   return await octokit.graphql(`
     mutation {
       addProjectV2ItemById(input: {projectId: "${projectId}" contentId: "${issueId}"}) {
-          projectV2Item {
+          item {
             id
           }
         }
