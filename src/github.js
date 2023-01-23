@@ -94,8 +94,8 @@ export const getProject = async ({
   }`);
 
   return {
-    items: items[type].projectNext.items,
-    projectId: items[type].projectNext.id,
+    items: items[type].projectV2.items,
+    projectId: items[type].projectV2.id,
   };
 };
 
