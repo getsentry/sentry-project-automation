@@ -82,11 +82,9 @@ export const getProject = async ({
           
           nodes {
             id
-            title
             content{
                 ...on Issue {
                     id
-                    title
                 }
               }
           }
