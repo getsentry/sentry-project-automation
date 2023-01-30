@@ -12,4 +12,4 @@ Sentry.init({
 
 syncFrontend();
 syncBackend();
-syncIngest();
+// syncIngest();
