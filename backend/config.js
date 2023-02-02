@@ -7,6 +7,7 @@ const CONFIG = {
     { owner: "getsentry", repo: "sentry-symfony" },
     { owner: "getsentry", repo: "sentry-go" },
     { owner: "getsentry", repo: "sentry-java" },
+    { owner: "getsentry", repo: "sentry-elixir" },
   ],
   githubProject: {
     githubUser: "getsentry",
