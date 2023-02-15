@@ -6,7 +6,7 @@ const CONFIG = {
   ],
   githubProject: {
     githubUser: "getsentry",
-    projectNumber: 32,
+    projectNumber: 23,
     type: "organization", // "user" or "organization"
   },
   PAGE_LIMIT: 50,
