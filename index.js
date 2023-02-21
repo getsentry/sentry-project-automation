@@ -14,4 +14,4 @@ Sentry.init({
 syncFrontend();
 syncBackend();
 syncReplay();
-// syncIngest();
+syncIngest();

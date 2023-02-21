@@ -28,12 +28,13 @@ export const getIssuesFromQuery = async (searchQuery, config) => {
                 ... on Issue {
                   id
                   title
+                  url
                 }
               }
             }
           }
         }
-      `;
+      `; 
 
   const firstPage = await octokit.graphql(constructQuery({ searchQuery }));
   let issues = [];
