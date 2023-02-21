@@ -34,7 +34,7 @@ export const getIssuesFromQuery = async (searchQuery, config) => {
             }
           }
         }
-      `; 
+      `;
 
   const firstPage = await octokit.graphql(constructQuery({ searchQuery }));
   let issues = [];
