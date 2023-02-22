@@ -28,6 +28,7 @@ export const getIssuesFromQuery = async (searchQuery, config) => {
                 ... on Issue {
                   id
                   title
+                  url
                 }
               }
             }

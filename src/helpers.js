@@ -30,7 +30,7 @@ export async function addIssuesToProject(issuesArray, projectId) {
     for (const issue of issuesArray) {
       await addItemToProject(projectId, issue.id);
 
-      console.info(`[${projectId}] Added: ${issue.id}`);
+      console.info(`[${projectId}] Added: ${issue.title} (${issue.url})`);
     }
 
     console.info(`[${projectId}] Syncing with project finished.`);
