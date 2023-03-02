@@ -62,7 +62,11 @@ export const queryTeamRepositories = (config) => {
     .map((repo) => `repo:${repo.owner}/${repo.repo}`)
     .join(" ");
 
-  return escapeSpecialChars(`${repoString} is:open`);
+  const ignoreString = (config.ignoreLabels ?? [])
+    .map((label) => ` -label:"${label}"`)
+    .join("");
+
+  return escapeSpecialChars(`${repoString} ${ignoreString} is:open`);
 };
 
 /**

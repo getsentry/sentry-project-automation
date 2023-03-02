@@ -9,7 +9,8 @@ const CONFIG = {
     type: "organization", // "user" or "organization"
   },
   PAGE_LIMIT: 50,
-  teamLabel: "Team: Ingest"
+  teamLabel: "Team: Ingest",
+  ignoreLabels: ["rerouted"],
 };
 
 export default CONFIG;
