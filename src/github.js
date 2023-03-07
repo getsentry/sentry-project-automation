@@ -189,7 +189,22 @@ export async function addItemToProject(projectId, issueId) {
         projectId: "${projectId}",
         contentId: "${issueId}"
       }) {
-        clientMutationId
+        item {
+          id
+          type
+          content {
+            ... on Issue {
+              id
+              title
+              url
+            }
+            ... on PullRequest {
+              id
+              title
+              url
+            }
+          }
+        }
       }
     }
   `);
@@ -251,6 +266,33 @@ export async function updateIterationField(project, itemId, fieldId, iterationId
         fieldId: "${fieldId}",
         value: {
           iterationId: "${iterationId}"
+        }
+      }) {
+        clientMutationId
+      }
+    }
+  `);
+}
+
+/**
+ * Update the single select field of a given project v2 item
+ * 
+ * @param {Object} project
+ * @param {string} itemId
+ * @param {string} fieldId
+ * @param {string} selectId
+ *
+ * @returns {Promise}
+ */
+export async function updateSelectField(project, itemId, fieldId, selectId) {
+  return await octokit.graphql(`
+    mutation {
+      updateProjectV2ItemFieldValue(input: {
+        projectId: "${project.projectId}",
+        itemId: "${itemId}",
+        fieldId: "${fieldId}",
+        value: {
+          singleSelectOptionId: "${selectId}"
         }
       }) {
         clientMutationId

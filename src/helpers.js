@@ -1,4 +1,4 @@
-import { addItemToProject, updateIterationField } from "./github.js";
+import { addItemToProject, updateIterationField, updateSelectField } from "./github.js";
 
 /**
  *
@@ -23,16 +23,20 @@ export async function addItemsToProject(project, items) {
   if (items.length) {
     console.info(`[${project.title}] Syncing with project starting...`);
 
+    let newItems = [];
     for (const item of items) {
-      await addItemToProject(project.projectId, item.id);
+      const response = await addItemToProject(project.projectId, item.id);
+      newItems.push(response.addProjectV2ItemById.item);
 
       console.info(`[${project.title}] Added: ${item.title} (${item.url})`);
     }
 
     console.info(`[${project.title}] Syncing with project finished.`);
-  } else {
-    console.info(`[${project.title}] Nothing to sync. Exiting.`);
+
+    return newItems;
   }
+  console.info(`[${project.title}] Nothing to sync. Exiting.`);
+  return [];
 }
 
 /**
@@ -52,7 +56,31 @@ export async function updateItemsIterationField(project, items, fieldId, iterati
     for (const item of items) {
       await updateIterationField(project, item.id, fieldId, iterationId);
 
-      console.info(`[${project.title}] Updated: ${item.title} (${item.url})`);
+      console.info(`[${project.title}] Updated: ${item.content.title} (${item.content.url})`);
+    }
+  } else {
+    console.info(`[${project.title}] Nothing to update. Exiting.`);
+  }
+}
+
+/**
+ * Update the single select field of an item belonging to a specific project
+ * 
+ * @param {Object} project
+ * @param {Array} items
+ * @param {string} fieldId
+ * @param {string} selectId
+ * 
+ * @returns {Promise}
+ */
+export async function updateItemsSelectField(project, items, fieldId, selectId) {
+  if (items.length) {
+    console.info(`[${project.title}] Updating select field starting...`);
+
+    for (const item of items) {
+      await updateSelectField(project, item.id, fieldId, selectId);
+
+      console.info(`[${project.title}] Updated: ${item.content.title} (${item.content.url})`);
     }
   } else {
     console.info(`[${project.title}] Nothing to update. Exiting.`);

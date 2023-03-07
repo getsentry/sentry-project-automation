@@ -1,5 +1,5 @@
 import { getAllProjectItems, getIssuesFromQuery, getOpenPullRequests, getCurrentIteration } from "../src/github.js";
-import { addItemsToProject, filterItemsNotInProject, updateItemsIterationField } from "../src/helpers.js";
+import { addItemsToProject, filterItemsNotInProject, updateItemsIterationField, updateItemsSelectField } from "../src/helpers.js";
 import CONFIG from "./config.js";
 import QUERIES from "./queries.js";
 
@@ -17,10 +17,12 @@ export default async function main() {
   console.info(`[${project.title}] Found ${issuesNotInProject.length} issues to sync.`);
   console.info(`[${project.title}] Found ${prsNotInProject.length} PRs to sync.`);
   
-  await addItemsToProject(project, [...issuesNotInProject, ...prsNotInProject]);
+  const newItems = await addItemsToProject(project, [...issuesNotInProject, ...prsNotInProject]);
 
-  // Set the field "Week" which is of type iteration to the current week
+  // Set the field "Week" on PRs which is of type iteration to the current week
+  const newPullRequests = newItems.filter((item) => item.type === "PULL_REQUEST");
   const iteration = await getCurrentIteration(CONFIG.githubProject);
   console.info(`[${project.title}] Current iteration: ${iteration.title}`);
-  await updateItemsIterationField(project, prs, iteration.fieldId, iteration.id);
+  await updateItemsIterationField(project, newPullRequests, iteration.fieldId, iteration.id);
+  await updateItemsSelectField(project, newPullRequests, "PVTSSF_lADOABVQ184AIawozgFQUtg", "47fc9ee4");
 }
