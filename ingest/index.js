@@ -8,7 +8,7 @@ export default async function main() {
     getIssuesFromQuery(QUERIES.teamRepositories, CONFIG),
     getIssuesFromQuery(QUERIES.sentryRepositories, CONFIG),
     getAllProjectItems(CONFIG),
-    getOpenPullRequests(CONFIG.repositories),
+    getOpenPullRequests([{ owner: "getsentry", repo: "relay" }]),
   ]);
 
   const issuesNotInProject = filterItemsNotInProject([...issues, ...additionalIssues], project.projectItems);
