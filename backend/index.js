@@ -1,7 +1,7 @@
 import { getAllProjectItems, getIssuesFromQuery } from "../src/github.js";
 import {
-  addIssuesToProject,
-  filterIssuesNotInProject,
+  addItemsToProject,
+  filterItemsNotInProject,
 } from "../src/helpers.js";
 import CONFIG from "./config.js";
 import QUERIES from "./queries.js";
@@ -13,12 +13,12 @@ export default async function main() {
     getAllProjectItems(CONFIG),
   ]);
 
-  const issuesNotInProject = filterIssuesNotInProject(
+  const issuesNotInProject = filterItemsNotInProject(
     [...issues, ...additionalIssues],
     project.projectItems
   );
 
   console.info(`[BACKEND] Found ${issuesNotInProject.length} issues to sync.`);
 
-  await addIssuesToProject(issuesNotInProject, project.projectId);
+  await addItemsToProject(issuesNotInProject, project.projectId);
 }

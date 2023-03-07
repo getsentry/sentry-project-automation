@@ -56,6 +56,31 @@ export const getIssuesFromQuery = async (searchQuery, config) => {
 };
 
 /**
+ * Fetches all the open pull requests from a given repository
+ * 
+ * @param {string} owner
+ * @param {string} repo
+ */
+
+export const getOpenPullRequests = async (repos) => {
+  const data = await Promise.all(repos.map((repo) => octokit.graphql(`
+  query {
+    repository(name: "${repo.repo}", owner: "${repo.owner}") {
+      pullRequests(first: 100, states: OPEN) {
+        nodes {
+          id
+          title
+          url
+        }
+      }
+    }  
+  }
+  `)));
+  const prs = data.map((repo) => repo.repository.pullRequests.nodes).flat();
+  return prs;
+};
+
+/**
  * @param {Object} project
  * @param {string} project.githubUser
  * @param {number} project.projectNumber
@@ -85,6 +110,9 @@ export const getProject = async ({
             id
             content{
                 ...on Issue {
+                    id
+                }
+                ...on PullRequest {
                     id
                 }
               }
@@ -155,13 +183,79 @@ export const getAllProjectItems = async (config) => {
  * @param {string} projectId
  * @param {string} issueId
  */
-export const addItemToProject = async (projectId, issueId) => {
+export async function addItemToProject(projectId, issueId) {
   return await octokit.graphql(`
     mutation {
-      addProjectV2ItemById(input: {projectId: "${projectId}" contentId: "${issueId}"}) {
-          item {
-            id
+      addProjectV2ItemById(input: {
+        projectId: "${projectId}",
+        contentId: "${issueId}"
+      }) {
+        clientMutationId
+      }
+    }
+  `);
+}
+
+/**
+ * Get the current iteration from a given userId, projectId and field name
+ * 
+ * @param {Object} githubProject
+ * 
+ * @returns {Promise}
+ */
+export async function getCurrentIteration(githubProject) {
+  const data = await octokit.graphql(`
+    query {
+      ${githubProject.type}(login: "${githubProject.githubUser}") {
+        projectV2(number: ${githubProject.projectNumber}) {
+          field(name: "${githubProject.iterationField}") {
+            ... on ProjectV2IterationField {
+              id
+              name
+              configuration {
+                iterations {
+                  id
+                  title
+                }
+              }
+            }
           }
         }
-      }`);
-};
+      }
+    }
+  `);
+
+  const iterations = data[githubProject.type].projectV2.field.configuration.iterations;
+  if (iterations.length === 0) {
+    throw new Error("No iterations found in project");
+  }
+
+  return {...iterations[0], fieldId: data[githubProject.type].projectV2.field.id};
+}
+
+/**
+ * Update the iteration field of a given project v2 item
+ * 
+ * @param {Object} project
+ * @param {string} itemId
+ * @param {string} fieldId
+ * @param {string} iterationId
+ *
+ * @returns {Promise}
+ */
+export async function updateIterationField(project, itemId, fieldId, iterationId) {
+  return await octokit.graphql(`
+    mutation {
+      updateProjectV2ItemFieldValue(input: {
+        projectId: "${project.projectNumber}",
+        itemId: "${itemId}",
+        fieldId: "${fieldId}",
+        value: {
+          iterationId: "${iterationId}"
+        }
+      }) {
+        clientMutationId
+      }
+    }
+  `);
+}

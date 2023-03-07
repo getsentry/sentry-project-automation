@@ -7,6 +7,7 @@ const CONFIG = {
     githubUser: "getsentry",
     projectNumber: 47,
     type: "organization", // "user" or "organization"
+    iterationField: "Week",
   },
   PAGE_LIMIT: 50,
   teamLabel: "Team: Ingest",
