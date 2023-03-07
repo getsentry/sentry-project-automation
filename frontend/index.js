@@ -20,5 +20,5 @@ export default async function main() {
 
   console.info(`[FRONTEND] Found ${issuesNotInProject.length} issues to sync.`);
 
-  await addItemsToProject(CONFIG.githubProject, issuesNotInProject);
+  await addItemsToProject(project, issuesNotInProject);
 }

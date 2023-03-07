@@ -21,17 +21,17 @@ export const filterItemsNotInProject = (items, projectItems) => {
  */
 export async function addItemsToProject(project, items) {
   if (items.length) {
-    console.info(`[PID:${project.projectNumber}] Syncing with project starting...`);
+    console.info(`[${project.title}] Syncing with project starting...`);
 
     for (const item of items) {
-      await addItemToProject(project.projectNumber, item.id);
+      await addItemToProject(project.projectId, item.id);
 
-      console.info(`[PID:${project.projectNumber}] Added: ${item.title} (${item.url})`);
+      console.info(`[${project.title}] Added: ${item.title} (${item.url})`);
     }
 
-    console.info(`[PID:${project.projectNumber}] Syncing with project finished.`);
+    console.info(`[${project.title}] Syncing with project finished.`);
   } else {
-    console.info(`[PID:${project.projectNumber}] Nothing to sync. Exiting.`);
+    console.info(`[${project.title}] Nothing to sync. Exiting.`);
   }
 }
 
@@ -47,15 +47,15 @@ export async function addItemsToProject(project, items) {
  */
 export async function updateItemsIterationField(project, items, fieldId, iterationId) {
   if (items.length) {
-    console.info(`[PID:${project.projectNumber}] Updating iteration field starting...`);
+    console.info(`[${project.title}] Updating iteration field starting...`);
 
     for (const item of items) {
       await updateIterationField(project, item.id, fieldId, iterationId);
 
-      console.info(`[PID:${project.projectNumber}] Updated: ${item.title} (${item.url})`);
+      console.info(`[${project.title}] Updated: ${item.title} (${item.url})`);
     }
   } else {
-    console.info(`[PID:${project.projectNumber}] Nothing to update. Exiting.`);
+    console.info(`[${project.title}] Nothing to update. Exiting.`);
   }
 }
 

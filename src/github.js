@@ -100,12 +100,12 @@ export const getProject = async ({
     ${type}(login: "${githubUser}"){
       projectV2(number: ${projectNumber}) {
         id
+        title
         items(first: ${limit}, after: ${after}) {
           pageInfo {
             endCursor
             hasNextPage
           }
-          
           nodes {
             id
             content{
@@ -122,10 +122,7 @@ export const getProject = async ({
     }
   }`);
 
-  return {
-    items: items[type].projectV2.items,
-    projectId: items[type].projectV2.id,
-  };
+  return items[type].projectV2;
 };
 
 /**
@@ -141,6 +138,7 @@ export const getAllProjectItems = async (config) => {
   );
   let items = [];
   let projectId = null;
+  let title = null;
 
   try {
     // Read the first page.
@@ -171,12 +169,13 @@ export const getAllProjectItems = async (config) => {
         : null;
     }
 
-    projectId = firstBatchOfItems?.projectId;
+    projectId = firstBatchOfItems?.id;
+    title = firstBatchOfItems?.title;
   } catch (error) {
     console.error(error);
   }
 
-  return { projectItems: items, projectId: projectId };
+  return { projectItems: items, projectId: projectId, title: title};
 };
 
 /**
@@ -247,7 +246,7 @@ export async function updateIterationField(project, itemId, fieldId, iterationId
   return await octokit.graphql(`
     mutation {
       updateProjectV2ItemFieldValue(input: {
-        projectId: "${project.projectNumber}",
+        projectId: "${project.projectId}",
         itemId: "${itemId}",
         fieldId: "${fieldId}",
         value: {
