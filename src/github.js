@@ -62,19 +62,32 @@ export const getIssuesFromQuery = async (searchQuery, config) => {
  * @param {string} repo
  */
 
-export const getOpenPullRequests = async (repos) => {
+export async function getOpenPullRequests(repos) {
   const data = await Promise.all(repos.map((repo) => octokit.graphql(`
-  query {
-    repository(name: "${repo.repo}", owner: "${repo.owner}") {
-      pullRequests(first: 100, states: OPEN) {
-        nodes {
-          id
-          title
-          url
+    query {
+      repository(name: "sentry", owner: "${repo.owner}") {
+        pullRequests(first: 100, states: OPEN) {
+          nodes {
+            id
+            title
+            url
+            closingIssuesReferences(first: 100) {
+              nodes {
+                id
+                url
+                projectsV2(first: 20) {
+                  nodes {
+                    id
+                    title
+                    number
+                  }
+                }
+              }
+            }
+          }
         }
       }
-    }  
-  }
+    }
   `)));
   const prs = data.map((repo) => repo.repository.pullRequests.nodes).flat();
   return prs;
