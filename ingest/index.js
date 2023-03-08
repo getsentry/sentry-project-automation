@@ -14,9 +14,9 @@ export default async function main() {
   const issuesNotInProject = filterItemsNotInProject([...issues, ...additionalIssues], project.projectItems);
   const prsNotInProject = filterItemsNotInProject(prs, project.projectItems).filter((pr) => {
     // Get all projects referenced through issues in the PR
-    const projects = pr.closingIssuesReferences?.nodes.map((issue) => issue.projectsV2.nodes).flat();
+    const projects = pr.closingIssuesReferences?.nodes.map((issue) => issue?.projectsV2.nodes).flat();
     // Filter out all non ingest projects
-    const ingestProjects = projects.filter((project) => project.number === CONFIG.githubProject.projectNumber);
+    const ingestProjects = projects.filter((project) => project?.number === CONFIG.githubProject.projectNumber);
     // If we have an ingest project referenced, we don't want to add the PR to the project
     return ingestProjects.length > 0;
   });
