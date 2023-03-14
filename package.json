@@ -12,7 +12,9 @@
   "author": "Vladan Paunovic <vladan.paunovic.bg@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@sentry/node": "^7.23.0",
+    "@sentry/node": "^7.43.0",
+    "@sentry/profiling-node": "^0.2.2",
+    "@sentry/tracing": "^7.43.0",
     "dotenv": "^16.0.0",
     "nodemon": "^2.0.15",
     "octokit": "^1.7.1",
