@@ -21,14 +21,14 @@ Sentry.init({
 });
 
 const frontendTransaction = Sentry.startTransaction({name: "Sync Frontend"});
-syncFrontend();
+await syncFrontend();
 frontendTransaction.finish();
 const backendTransaction = Sentry.startTransaction({name: "Sync Backend"});
-syncBackend();
+await syncBackend();
 backendTransaction.finish();
 const replayTransaction = Sentry.startTransaction({name: "Sync Replay"});
-syncReplay();
+await syncReplay();
 replayTransaction.finish();
 const ingestTransaction = Sentry.startTransaction({name: "Sync Ingest"});
-syncIngest();
+await syncIngest();
 ingestTransaction.finish();
