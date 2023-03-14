@@ -261,16 +261,17 @@ export async function getCurrentIteration(githubProject) {
 }
 
 /**
- * Update the iteration field of a given project v2 item
+ * Generic function to update a field of a given project v2 item
  * 
- * @param {Object} project
- * @param {string} itemId
- * @param {string} fieldId
- * @param {string} iterationId
- *
+ * @param {"singleSelectOption"|"iteration"} fieldType 
+ * @param {Object} project 
+ * @param {string} itemId 
+ * @param {string} fieldId 
+ * @param {string} valueId 
+ * 
  * @returns {Promise}
  */
-export async function updateIterationField(project, itemId, fieldId, iterationId) {
+export async function updateProjectField(fieldType, project, itemId, fieldId, valueId) {
   return await octokit.graphql(`
     mutation {
       updateProjectV2ItemFieldValue(input: {
@@ -278,34 +279,7 @@ export async function updateIterationField(project, itemId, fieldId, iterationId
         itemId: "${itemId}",
         fieldId: "${fieldId}",
         value: {
-          iterationId: "${iterationId}"
-        }
-      }) {
-        clientMutationId
-      }
-    }
-  `);
-}
-
-/**
- * Update the single select field of a given project v2 item
- * 
- * @param {Object} project
- * @param {string} itemId
- * @param {string} fieldId
- * @param {string} selectId
- *
- * @returns {Promise}
- */
-export async function updateSelectField(project, itemId, fieldId, selectId) {
-  return await octokit.graphql(`
-    mutation {
-      updateProjectV2ItemFieldValue(input: {
-        projectId: "${project.projectId}",
-        itemId: "${itemId}",
-        fieldId: "${fieldId}",
-        value: {
-          singleSelectOptionId: "${selectId}"
+          ${fieldType}Id: "${valueId}"
         }
       }) {
         clientMutationId

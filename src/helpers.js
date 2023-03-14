@@ -1,4 +1,4 @@
-import { addItemToProject, updateIterationField, updateSelectField } from "./github.js";
+import { addItemToProject } from "./github.js";
 
 /**
  *
@@ -40,45 +40,17 @@ export async function addItemsToProject(project, items) {
 }
 
 /**
- * Update the iteration field of an item belonging to a specific project
- * 
- * @param {Object} project
- * @param {Array} items
- * @param {string} fieldId
- * @param {string} iterationId
- * 
- * @returns {Promise}
+ * Generic looping function that injects logging
+ * @param {Object} project 
+ * @param {Array} items 
+ * @param {Function} callback 
  */
-export async function updateItemsIterationField(project, items, fieldId, iterationId) {
+export async function loopWithLogging(project, items, callback) {
   if (items.length) {
     console.info(`[${project.title}] Updating iteration field starting...`);
 
     for (const item of items) {
-      await updateIterationField(project, item.id, fieldId, iterationId);
-
-      console.info(`[${project.title}] Updated: ${item.content.title} (${item.content.url})`);
-    }
-  } else {
-    console.info(`[${project.title}] Nothing to update. Exiting.`);
-  }
-}
-
-/**
- * Update the single select field of an item belonging to a specific project
- * 
- * @param {Object} project
- * @param {Array} items
- * @param {string} fieldId
- * @param {string} selectId
- * 
- * @returns {Promise}
- */
-export async function updateItemsSelectField(project, items, fieldId, selectId) {
-  if (items.length) {
-    console.info(`[${project.title}] Updating select field starting...`);
-
-    for (const item of items) {
-      await updateSelectField(project, item.id, fieldId, selectId);
+      callback(item);
 
       console.info(`[${project.title}] Updated: ${item.content.title} (${item.content.url})`);
     }

@@ -1,5 +1,5 @@
-import { getAllProjectItems, getIssuesFromQuery, getOpenPullRequests, getCurrentIteration } from "../src/github.js";
-import { addItemsToProject, filterItemsNotInProject, updateItemsIterationField, updateItemsSelectField } from "../src/helpers.js";
+import { getAllProjectItems, getIssuesFromQuery, getOpenPullRequests, getCurrentIteration, updateProjectField } from "../src/github.js";
+import { addItemsToProject, filterItemsNotInProject, loopWithLogging } from "../src/helpers.js";
 import CONFIG from "./config.js";
 import QUERIES from "./queries.js";
 
@@ -30,6 +30,6 @@ export default async function main() {
   const newPullRequests = newItems.filter((item) => item.type === "PULL_REQUEST");
   const iteration = await getCurrentIteration(CONFIG.githubProject);
   console.info(`[${project.title}] Current iteration: ${iteration.title}`);
-  await updateItemsIterationField(project, newPullRequests, iteration.fieldId, iteration.id);
-  await updateItemsSelectField(project, newPullRequests, "PVTSSF_lADOABVQ184AIawozgFQUtg", "47fc9ee4");
+  await loopWithLogging(project, newPullRequests, (item) => updateProjectField("iteration", project, item, iteration.fieldId, iteration.id));
+  await loopWithLogging(project, newPullRequests, (item) => updateProjectField("singleSelectOption", project, item, "PVTSSF_lADOABVQ184AIawozgFQUtg", "47fc9ee4"));
 }
