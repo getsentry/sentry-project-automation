@@ -1,11 +1,29 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { Octokit } from "octokit";
+import Sentry from "@sentry/node";
 
+// Initialize the Octokit client
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-// Helper function, used to test auth flow
-export const login = await octokit.rest.users.getAuthenticated();
+// Wrap the Octokit request method to add tracing
+octokit.hook.wrap("request", async (request, options) => {
+  const transaction = Sentry.getCurrentHub().getScope().getTransaction();
+  if (transaction) {
+    let desc = options.url;
+    if (options.url?.endsWith("graphql")) {
+      desc = options.query;
+    }
+    const span = transaction.startChild({ op: "request", description: desc });
+    try {
+      return await request(options);
+    } finally {
+      span.finish();
+    }
+  } else {
+    return await request(options);
+  }
+});
 
 /**
  * @param {string} searchQuery
