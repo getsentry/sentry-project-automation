@@ -22,6 +22,8 @@ Sentry.init({
 async function traceFn(fn, name) {
   const transaction = Sentry.getCurrentHub().getScope().getTransaction();
   const span = transaction.startChild({ op: name });
+  Sentry.getCurrentHub().pushScope();
+  Sentry.configureScope(scope => scope.setSpan(span));
   try {
     await fn();
   } catch(e) {
