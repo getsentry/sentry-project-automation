@@ -21,13 +21,17 @@ Sentry.init({
 });
 
 async function traceFn(fn) {
-  Sentry.withScope(async scope => {
-    const transaction = Sentry.startTransaction({name: fn.name});
-    scope.setSpan(transaction);
+  const transaction = Sentry.getCurrentHub().getScope().getTransaction();
+  const span = transaction.startChild({ op: fn.name });
+  try {
     await fn();
-    transaction.finish();
-  });
+  } finally {
+    span.finish();
+  }
 }
+
+const transaction = Sentry.startTransaction({ name: "main" });
+Sentry.configureScope(scope => scope.setSpan(transaction));
 
 await Promise.all([
   traceFn(syncFrontend),
@@ -35,3 +39,5 @@ await Promise.all([
   traceFn(syncReplay),
   traceFn(syncIngest),
 ]);
+
+transaction.finish();
