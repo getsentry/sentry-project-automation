@@ -13,16 +13,15 @@ import { ProfilingIntegration } from "@sentry/profiling-node";
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   integrations: [
-    new Sentry.Integrations.Http({ tracing: true }),
     new ProfilingIntegration(),
   ],
   tracesSampleRate: 1.0,
   profilesSampleRate: 1.0,
 });
 
-async function traceFn(fn) {
+async function traceFn(fn, name) {
   const transaction = Sentry.getCurrentHub().getScope().getTransaction();
-  const span = transaction.startChild({ op: fn.name });
+  const span = transaction.startChild({ op: name });
   try {
     await fn();
   } catch(e) {
@@ -36,10 +35,10 @@ const transaction = Sentry.startTransaction({ name: "main" });
 Sentry.configureScope(scope => scope.setSpan(transaction));
 
 await Promise.all([
-  traceFn(syncFrontend),
-  traceFn(syncBackend),
-  traceFn(syncReplay),
-  traceFn(syncIngest),
+  traceFn(syncFrontend, "frontend"),
+  traceFn(syncBackend, "backend"),
+  traceFn(syncReplay, "replay"),
+  traceFn(syncIngest, "ingest"),
 ]);
 
 transaction.finish();
