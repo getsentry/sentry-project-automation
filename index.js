@@ -25,6 +25,8 @@ async function traceFn(fn) {
   const span = transaction.startChild({ op: fn.name });
   try {
     await fn();
+  } catch(e) {
+    Sentry.captureException(e);
   } finally {
     span.finish();
   }
