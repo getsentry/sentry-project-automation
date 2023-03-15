@@ -20,15 +20,18 @@ Sentry.init({
   profilesSampleRate: 1.0,
 });
 
-const frontendTransaction = Sentry.startTransaction({name: "Sync Frontend"});
-await syncFrontend();
-frontendTransaction.finish();
-const backendTransaction = Sentry.startTransaction({name: "Sync Backend"});
-await syncBackend();
-backendTransaction.finish();
-const replayTransaction = Sentry.startTransaction({name: "Sync Replay"});
-await syncReplay();
-replayTransaction.finish();
-const ingestTransaction = Sentry.startTransaction({name: "Sync Ingest"});
-await syncIngest();
-ingestTransaction.finish();
+async function traceFn(fn) {
+  Sentry.withScope(async scope => {
+    const transaction = Sentry.startTransaction({name: fn.name});
+    scope.setSpan(transaction);
+    await fn();
+    transaction.finish();
+  });
+}
+
+await Promise.all([
+  traceFn(syncFrontend),
+  traceFn(syncBackend),
+  traceFn(syncReplay),
+  traceFn(syncIngest),
+]);
