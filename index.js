@@ -4,7 +4,7 @@ dotenv.config();
 // import syncFrontend from "./frontend/index.js";
 // import syncBackend from "./backend/index.js";
 import syncReplay from "./replay/index.js";
-import syncIngest from "./ingest/index.js";
+// import syncIngest from "./ingest/index.js";
 
 import Sentry from "@sentry/node";
 import "@sentry/tracing";
@@ -40,7 +40,7 @@ await Promise.all([
 //   traceFn(syncFrontend, "frontend"),
 //   traceFn(syncBackend, "backend"),
   traceFn(syncReplay, "replay"),
-  traceFn(syncIngest, "ingest"),
+  // traceFn(syncIngest, "ingest"),
 ]);
 
 transaction.finish();
